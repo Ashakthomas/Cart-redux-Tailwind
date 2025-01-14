@@ -54,6 +54,15 @@ const Cart = () => {
             </div>
 
         </div>
+        <div className='col-span-1'>
+          <div className='border rounded p-5'>
+            <h2 className='text-2xl font-bold my-4'>Total Amount: <span className='text-red-600'>$250</span></h2>
+            <hr />
+            <button className='bg-green-600 p-2 text-white w-full mt-4'>Check Out</button>
+
+          </div>
+
+        </div>
 
       </div>
       </>
