@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToWishlist } from '../redux/slices/wishlistSlice'
+import { addToCart } from '../redux/slices/cartSlice'
+
 
 const View = () => {
+  const usercart = useSelector(state=>state.cartReducer)
+  const dispatch = useDispatch()
+  const userWishlist = useSelector(state=>state.wishlistReducer)
+
+
+
   const [product,setProduct] = useState({})
   const {id} = useParams()
   console.log(id);
@@ -19,6 +28,35 @@ const View = () => {
     }
 
   },[])
+
+  const handleWishlist = ()=>{
+    const existingProduct = userWishlist?.find(item=>item?.id==id)
+    if(existingProduct)
+    {
+      alert("Product Already Exsit in Wishlist!!!")
+
+    }
+    else{
+      dispatch(addToWishlist(product))
+      alert("Product Added to Wishlist")
+
+    }
+  }
+
+  const handleCart = ()=>{
+    dispatch(addToCart(product))
+    const existingProduct = usercart?.find(item=>item?.id==id)
+    if(existingProduct)
+    {
+      alert("Product quantity incremented")
+
+    }
+    else{
+      dispatch(addToWishlist(product))
+      alert("Product Added to Cart")
+
+    }
+  }
   
   
   return (
@@ -29,8 +67,8 @@ const View = () => {
         <div>
           <img height={'250px'} width={'350px'} src={product?.thumbnail} alt="" />
           <div className='flex justify-between mt-5'>
-              <button className='bg-blue-600 rounded text-white p-2'>Add to whishlist</button>
-              <button className='bg-green-600 rounded text-white p-2'>Add to cart</button>
+              <button onClick={handleWishlist}  className='bg-blue-600 rounded text-white p-2'>Add to whishlist</button>
+              <button onClick={handleCart} className='bg-green-600 rounded text-white p-2'>Add to cart</button>
             </div>
         </div>
         <div>
@@ -48,7 +86,7 @@ const View = () => {
             product?.reviews?.map(item=>(
               <div key={item.date} className='shadow border rounded p-2 mb-2'>
                 <h5>
-                  <span className='font-bold'>{item?.reviwerName}</span> : <span>{item?.comment}</span>
+                  <span className='font-bold'>{item?.reviewerName}</span> : <span>{item?.comment}</span>
                 </h5>
                 <p>Rating : {item?.rating} <i className='fa-solid fa-star text-yellow-600'></i></p>
 
